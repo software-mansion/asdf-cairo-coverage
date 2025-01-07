@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  merge_group:
+
+jobs:
+  test:
+    name: test ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Fetch latest cairo-coverage version from GitHub releases"
+        id: version
+        shell: bash
+        run: |
+          latest_version=$(curl -s https://api.github.com/repos/software-mansion/cairo-coverage/releases/latest | jq -r .name)
+          echo "Latest cairo-coverage version found is $latest_version"
+          echo "LATEST_VERSION=$latest_version" >> $env:GITHUB_OUTPUT
+
+      - name: "Check cairo-coverage latest"
+        uses: asdf-vm/actions/plugin-test@v3
+        with:
+          command: cairo-coverage --version | grep "cairo-coverage ${{ steps.version.outputs.LATEST_VERSION }}"
+
+      - name: "Check cairo-coverage v0.2.0"
+        uses: asdf-vm/actions/plugin-test@v3
+        with:
+          skip_install: true
+          version: 0.2.0
+          command: cairo-coverage --version | grep "cairo-coverage 0.2.0"
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck bin/* lib/*
+
+  shfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mfinelli/setup-shfmt@v3
+      - uses: actions/checkout@v4
+      - run: shfmt --diff .
