@@ -16,7 +16,7 @@ asdf plugin add cairo-coverage https://github.com/software-mansion/asdf-cairo-co
 Show all installable versions:
 
 ```shell
-asdf list-all cairo-coverage
+asdf list all cairo-coverage
 ```
 
 Install latest version:
@@ -34,7 +34,7 @@ asdf install cairo-coverage 0.2.0
 Set a version globally (in your `~/.tool-versions` file):
 
 ```shell
-asdf global cairo-coverage latest
+asdf set --home cairo-coverage latest
 ```
 
 Now cairo-coverage commands are available:
