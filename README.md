@@ -8,6 +8,12 @@ This plugin needs `bash`, `curl`, `tar` and other generic POSIX utilities.
 Everything should be included by default on your system.
 
 ```shell
+asdf plugin add cairo-coverage
+```
+
+or
+
+```shell
 asdf plugin add cairo-coverage https://github.com/software-mansion/asdf-cairo-coverage.git
 ```
 
